@@ -1,44 +1,44 @@
 (function() {
 	
+	function defaultData(){
+  	return {
+  	  pos: {
+    	  x: 0,
+    	  y: 0
+  	  },
+    	mode: "moving"
+  	}
+	}
+	
 	function Game(){
-		
+		this.d = defaultData();
 	};
 
 	Game.prototype.init = (function() {
+			
+	});
+	
+	Game.prototype.controlReceiver = (function(event, direction) {
+			
+			if(event == "dPad"){
+			//if(direction.x != 0 ||  direction.y != 0 ){
+			  $("#dev-data").html("x = " + direction.x + " - y = " + direction.y);
+      //}
+			}
 			
 	});	
 
 	// Direction buttons
 	Game.prototype.dPad = (function(direction){ return this.controlDispatcher("dPad", direction); });
-		
-	// A button
-	Game.prototype.aButton = (function(){ return this.controlDispatcher("aButton"); });
-	Game.prototype.aButtonDown = (function(){ return this.controlDispatcher("aButtonDown"); });
-	Game.prototype.aButtonUp = (function(){ return this.controlDispatcher("aButtonUP"); });
-		
-	// B button
-	Game.prototype.bButton = (function(){ return this.controlDispatcher("bButton"); });	
-	Game.prototype.bButtonDown = (function(){ return this.controlDispatcher("bButtonDown"); });
-	Game.prototype.bButtonUp = (function(){ return this.controlDispatcher("bButtonUp"); });
-	
-	// Start + Select
-	Game.prototype.startButton = (function(){ return this.controlDispatcher("startButton"); });	
-	Game.prototype.selectButton = (function(){ return this.controlDispatcher("selectButton"); });
-	
-	// L + R
-	Game.prototype.lButton = (function(){ return this.controlDispatcher("lButton"); });	
-	Game.prototype.rButton = (function(){ return this.controlDispatcher("rButton"); });	
 	
 	// Control Dispatcher
 	Game.prototype.controlDispatcher = (function(event, direction){
-		/*
 		var destiny = null;
-		switch(this.data.mode){
-			case "moving": destiny = this.map.moving; break;
+		/*switch(this.d.mode){
+			case "moving": destiny = this.wa; break;
 			default: return false;
-		}
-		return destiny.controlReceiver(event, direction);
-		*/
+		}*/
+		return this.controlReceiver(event, direction);
 	});
 	
 	window.Game = Game;
