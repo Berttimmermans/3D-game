@@ -40,8 +40,8 @@ module.exports = function(grunt) {
     },
     watch: {
       css: {
-        files: ['sass/*.scss', 'notify:watchCSS'],
-        tasks: ['compass'],
+        files: ['sass/*.scss'],
+        tasks: ['compass', 'notify:watchCSS'],
       },
       js: {
         files: ['js/*.js'],

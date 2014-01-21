@@ -3,11 +3,9 @@
 	function Touch(game){
 		
 		this.game = game;
-		this.dPad = "none";
-		this.pos = {
-  		x: 0,
-  		y: 0
-		};
+		this.pos = { x: 0, y: 0 };
+		this.size = 140;
+		this.buttonSize = 70;
 		this.iPad = navigator.userAgent.match(/iPad/i) != null;
 		this.iPhone = navigator.userAgent.match(/iPhone/i) != null;
 		this.iPod = navigator.userAgent.match(/iPod/i) != null;
@@ -15,111 +13,64 @@
 		
 	};
 	
-	Touch.prototype = (function() {
+	Touch.prototype.init = (function(){
 		
-		function init(){
+		if(this.iPad == true || this.iPhone == true || this.iPod == true || this.android == true){
+			this.build();
+		}
+		return;
 		
-			if(this.iPad == true || this.iPhone == true || this.iPod == true || this.android == true){
-				this.build();
-				return this.check();
-			}
-			return;
-			
-		};
+  });
 		
-		function build(){
+	Touch.prototype.build = (function(){
 			
-			var self = this;
-			
-			$('body').append('<div class="controls"></div>');
-			$('.controls').append('<div id="up"></div>');
-			$('.controls').append('<div id="right"></div>');
-			$('.controls').append('<div id="down"></div>');
-			$('.controls').append('<div id="left"></div>');
-			
-			$("body").bind("touchstart", function(event) { 
-				 return event.preventDefault(); 
-			});
-			
-			$("#up").bind("touchstart, mousedown", function(){ 
-				self.dPad = "up"; 
-				$(this).addClass('active');
-			}).bind("touchend, mouseup", function() { 
-				self.dPad = "none"; 
-				$('.controls .active').removeClass('active');
-			});
-			
-			$("#right").bind("touchstart, mousedown", function(){ 
-				self.dPad = "right"; 
-				$(this).addClass('active'); 
-				return;
-			}).bind("touchend, mouseup", function() { 
-				self.dPad = "none"; 
-				$('.controls .active').removeClass('active');
-				return;
-			});
-			
-			$("#down").bind("touchstart, mousedown", function(){ 
-				self.dPad = "down"; 
-				$(this).addClass('active'); 
-				return;
-			}).bind("touchend, mouseup", function() { 
-				self.dPad = "none";  
-				$('.controls .active').removeClass('active');
-				return;
-			});
-			
-			$("#left").bind("touchstart, mousedown", function(){ 
-				self.dPad = "left"; 
-				$(this).addClass('active'); 
-				return;
-			}).bind("touchend, mouseup", function() { 
-				self.dPad = "none"; 
-				$('.controls .active').removeClass('active'); 
-				return;
-			});
-			
-			return;
-			
-		};
+		var self = this;
 		
-		function check(){
+		$('body').append('<div class="controls"></div>');
+		$('.controls').append('<div id="dPad"><div id="dPad-stick"></div></div>');
 		
-			switch(this.dPad){
-				case "up" :
-					this.game.dPad("up");
-					break;
-				case "right" :
-					this.game.dPad("right");
-					break;
-				case "down" :
-					this.game.dPad("down");
-					break;
-				case "left" :
-					this.game.dPad("left");
-					break;
-			}
-			var self = this;
-			return setTimeout(function(){
-				return self.check();
-			}, 60);
+		$("body").bind("touchstart", function(event) { 
+			 return event.preventDefault(); 
+		});
+		
+		$("#dPad").bind("touchstart", function(){ 
+		
+			$(this).addClass('active');
 			
-		};
-
-		return {
+		}).bind("touchmove", function(event) {
 		
-			constructor: Touch,
-			init: function() { return this._(init)() },
-			build: function() { return this._(build)() },
-			check: function() { return this._(check)() },
-			_: function(callback){
-				var self = this;
-				return function(){ return callback.apply(self, arguments); };
-			}
+      var touchX = event.originalEvent.touches[0].pageX;
+      var touchY = event.originalEvent.touches[0].pageY;
+      
+      var pos = $(this).position();
+      
+      var x = (touchX - pos.left)-self.size/2;
+      var y = (touchY - pos.top)-self.size/2;
+      var space = (self.size-self.buttonSize)/2
+      
+      if(x < -space) x = -space;
+      if(x > space) x = space;
+      if(y < -space) y = -space;
+      if(y > space) y = space;
+      
+      $("#dev-data").html('translate(' + x + 'px, ' + y + 'px)');
+			self.translate(x,y);
+      
+		}).bind("touchend", function() { 
+		
+			$('.controls .active').removeClass('active');
+			self.translate(0,0);
 			
-		};
+		});
 		
-	})();
+		return;
+			
+  });
+		
+	Touch.prototype.translate = (function(x,y){
+	  object = document.getElementById('dPad-stick');
+    object.style.webkitTransform = "translate("+x+"px,"+y+"px)";
+	});
 
 	window.Touch = Touch;
 	
