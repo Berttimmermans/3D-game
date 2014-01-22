@@ -4,8 +4,8 @@
 		
 		this.game = game;
 		this.pos = { x: 0, y: 0 };
-		this.size = 140;
-		this.buttonSize = 70;
+		this.size = 160;
+		this.buttonSize = 80;
 		this.iPad = navigator.userAgent.match(/iPad/i) != null;
 		this.iPhone = navigator.userAgent.match(/iPhone/i) != null;
 		this.iPod = navigator.userAgent.match(/iPod/i) != null;
@@ -27,7 +27,7 @@
 		var self = this;
 		
 		$('body').append('<div class="controls"></div>');
-		$('.controls').append('<div id="dPad"><div id="dPad-stick"></div></div>');
+		$('.controls').append('<div id="dPad"><div id="dPad-stick"></div></</div>');
 		
 		$("body").bind("touchstart", function(event) { 
 			 return event.preventDefault(); 
@@ -53,15 +53,21 @@
       if(y < -space) y = -space;
       if(y > space) y = space;
       
-      $("#dev-data").html('translate(' + x + 'px, ' + y + 'px)');
-			self.translate(x,y);
+      self.translate(x,y);
       
+      self.pos.x = (x < -(self.size/8))? -1 : (x > (self.size/8))? 1 : 0;
+      self.pos.y = (y < -(self.size/8))? -1 : (y > (self.size/8))? 1 : 0;
+      
+      return self.game.dPad(self.pos); 
+			 
 		}).bind("touchend", function() { 
 		
 			$('.controls .active').removeClass('active');
+      self.pos = { x: 0, y: 0 };
 			self.translate(0,0);
+      return self.game.dPad(self.pos); 
 			
-		});
+		})
 		
 		return;
 			
@@ -70,6 +76,11 @@
 	Touch.prototype.translate = (function(x,y){
 	  object = document.getElementById('dPad-stick');
     object.style.webkitTransform = "translate("+x+"px,"+y+"px)";
+	});
+		
+	Touch.prototype.rotate = (function(deg){
+	  object = document.getElementById('dPad-stick');
+    object.style.webkitTransform = "rotate("+deg+"deg)";
 	});
 
 	window.Touch = Touch;
