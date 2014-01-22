@@ -9,3 +9,13 @@ body{
   font-family: "helvetica neue";
   color: #FFF;
 }
+
+#charachter{
+  position: absolute;
+  left: 50%; top: 50%;
+  display: block;
+  width: 20px; height: 20px;
+  background: #FFF;
+  margin: -10px 0 -10px 0;
+  @include border-radius(10px);
+}

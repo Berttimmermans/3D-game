@@ -12,6 +12,7 @@
 	
 	function Game(){
 		this.d = defaultData();
+    this.charachter = document.getElementById('charachter');
 	};
 
 	Game.prototype.init = (function() {
@@ -23,6 +24,12 @@
 			if(event == "dPad"){
 			//if(direction.x != 0 ||  direction.y != 0 ){
 			  $("#dev-data").html("x = " + direction.x + " - y = " + direction.y);
+			  
+			  this.d.pos.x += direction.x;
+			  this.d.pos.y += direction.y; 
+			  
+        this.charachter.style.webkitTransform = "translate("+this.d.pos.x+"px,"+this.d.pos.y+"px)";
+			  
       //}
 			}
 			

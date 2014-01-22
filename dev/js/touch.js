@@ -6,6 +6,8 @@
 		this.pos = { x: 0, y: 0 };
 		this.size = 160;
 		this.buttonSize = 80;
+		this.update;
+		this.interval = 10;
 		this.iPad = navigator.userAgent.match(/iPad/i) != null;
 		this.iPhone = navigator.userAgent.match(/iPhone/i) != null;
 		this.iPod = navigator.userAgent.match(/iPod/i) != null;
@@ -35,6 +37,9 @@
 		
 		$("#dPad").bind("touchstart", function(){ 
 		
+		  self.update = setInterval(function(){
+		    return self.game.dPad(self.pos); 
+		  }, self.interval); 
 			$(this).addClass('active');
 			
 		}).bind("touchmove", function(event) {
@@ -58,10 +63,10 @@
       self.pos.x = (x < -(self.size/8))? -1 : (x > (self.size/8))? 1 : 0;
       self.pos.y = (y < -(self.size/8))? -1 : (y > (self.size/8))? 1 : 0;
       
-      return self.game.dPad(self.pos); 
 			 
 		}).bind("touchend", function() { 
 		
+		  clearInterval(self.update);
 			$('.controls .active').removeClass('active');
       self.pos = { x: 0, y: 0 };
 			self.translate(0,0);
@@ -76,11 +81,6 @@
 	Touch.prototype.translate = (function(x,y){
 	  object = document.getElementById('dPad-stick');
     object.style.webkitTransform = "translate("+x+"px,"+y+"px)";
-	});
-		
-	Touch.prototype.rotate = (function(deg){
-	  object = document.getElementById('dPad-stick');
-    object.style.webkitTransform = "rotate("+deg+"deg)";
 	});
 
 	window.Touch = Touch;
