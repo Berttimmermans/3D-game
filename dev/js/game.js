@@ -37,74 +37,39 @@
 	
 	Game.prototype.controlReceiver = (function(event, direction) {
 			
-			if(event == "dPad"){
-			  
-			  var x = this.d.pos.x+direction.x;
-			  var y = this.d.pos.y+direction.y;
-			  var p = this.logicMapContext.getImageData(x, y, 1, 1).data; 
-        var check = this.validateMap(p[0], p[1], p[2]);
-        
-			  if(check != "wall"){
-			  
-  			  this.d.pos.x += direction.x;
-  			  this.d.pos.y += direction.y; 
-  			  this.d.pos.z = check; 
-      		$("#dev-data").html("x = " + this.d.pos.x + " - y = " + this.d.pos.y + " - z " + this.d.pos.z);
-          this.updatePos();
-    			  
-			  } else {
-			  
-  			  x = this.d.pos.x+direction.x;
-  			  y = this.d.pos.y
-  			  p = this.logicMapContext.getImageData(x, y, 1, 1).data; 
-          check = this.validateMap(p[0], p[1], p[2]);
-          
-           if(check != "wall"){
-			  
-    			  this.d.pos.x += direction.x;
-            this.d.pos.z = check; 
-            $("#dev-data").html("x = " + this.d.pos.x + " - y = " + this.d.pos.y + " - z " + this.d.pos.z);
-            this.updatePos();
-           
-           } else {
-           
-    			  x = this.d.pos.x;
-    			  y = this.d.pos.y+direction.y;
-    			  p = this.logicMapContext.getImageData(x, y, 1, 1).data; 
-            check = this.validateMap(p[0], p[1], p[2]);
-           
-            if(check != "wall"){
-			  
-      			  this.d.pos.y += direction.y;
-              this.d.pos.z = check; 
-      			  $("#dev-data").html("x = " + this.d.pos.x + " - y = " + this.d.pos.y + " - z " + this.d.pos.z);
-              this.updatePos();
-              
-            }
-            
-          }
-  			  
-			  }
-        
-			}
+			if(event == "dPad") this.walk(direction)
 			
 	});	
 	
+	// Walk through world if possible
+	Game.prototype.walk = (function(direction){
+	
+    var check = this.readMap(direction.x, direction.y);
+    check = (check != false)? check : this.readMap(0, direction.y);
+    check = (check != false)? check : this.readMap(direction.x, 0);
+    if(check.x == 0 && check.y == 0) return false;
+    this.d.pos = check;
+    this.updatePos();
+    
+	});
+	
+	// visually move charachter
 	Game.prototype.updatePos = (function(){
 	
 	  var z = (this.d.pos.z+100)/100;
 	  this.charachter.style.webkitTransform = "translate("+this.d.pos.x+"px,"+this.d.pos.y+"px) scale("+z+")";
-
+	  
 	});
 	
-	Game.prototype.validateMap = (function(r, g, b){
-  	
-      if (r == g && g == b && r == b){
-        return parseInt(-r/(2.55)+100);
-      } else if(r == 255) {
-        return "wall";
-      }
-  
+	// Read map pixel and return false or new location
+	Game.prototype.readMap = (function(x,y){
+	
+	  var x = this.d.pos.x+x;
+    var y = this.d.pos.y+y;
+		var pixel = this.logicMapContext.getImageData(x, y, 1, 1).data; 
+    if(pixel[0] == pixel[1] && pixel[1] == pixel[2]) return { x:x, y:y, z:parseInt(-pixel[0]/(2.55)+100) }  
+    return false; 
+    
 	});
 	
 	// Direction buttons
@@ -112,7 +77,9 @@
 	
 	// Control Dispatcher
 	Game.prototype.controlDispatcher = (function(event, direction){
+	
 		return this.controlReceiver(event, direction);
+		
 	});
 	
 	window.Game = Game;
