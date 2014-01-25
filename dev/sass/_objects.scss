@@ -1,0 +1,56 @@
+@mixin box($width,$height,$depth,$x,$y,$z){
+
+  display: block;
+  width: $width; height: $depth;
+  position: absolute;
+  top:0px; left: 0px;
+  
+  @include transform-style(preserve-3d);
+  @include transform( translate3d($x,$y,$z) );
+    
+  li{
+    position: absolute;
+    left: 0px; top: 0px;
+    display: block;
+    background: rgba(0,0,0,0.3);
+    text-align: center;
+    opacity: 0.8;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    
+    @include backface-visibility(hidden);
+    
+    &:nth-child(1){
+      @include transform( translate3D(0,0,0) rotateY(-180deg) );
+      width: $width; height: $depth;
+    }
+    &:nth-child(2){
+      @include transform( translate3D(0,0,$height) );
+      width: $width; height: $depth;
+    }
+    &:nth-child(3){
+      @include transform( translate3D(0,-$height/2,$height/2) rotateX(-90deg) rotateY(180deg) );
+      width: $width; height: $height;
+    }
+    &:nth-child(4){
+      @include transform( translate3D(0,($depth)-($height/2),$height/2) rotateX(-90deg) );
+      width: $width; height: $height;
+    }
+    &:nth-child(5){
+      @include transform( translate3D(-$depth/2,$depth/2-$height/2,$height/2) rotateY(-90deg) rotateZ(90deg) );
+      width: $depth; height: $height;
+    }
+    &:nth-child(6){
+      @include transform( translate3D(-$depth/2+$width,$depth/2-$height/2,$height/2) rotateX(-90deg) rotateY(90deg) );
+      width: $depth; height: $height;
+    }   
+    
+    span{
+      font-family: "helvetica";
+      font-size: 20px;
+      font-weight: bold;
+      color: rgba(255,255,255, 0.5);
+    }
+  }
+  
+}

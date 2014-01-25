@@ -7,12 +7,12 @@
     	mode: "moving",
     	directory: "img/LVL-1-logic-map.png"
   	}
-	}
+	};
 	
 	function Game(){
 	
 		this.d = defaultData();
-    this.charachter = document.getElementById('charachter');
+    this.charachter = $('.charachter')[0];
     
     this.logicMap = document.createElement('canvas');
     this.logicMapContext = this.logicMap.getContext('2d');	
@@ -32,12 +32,6 @@
 	Game.prototype.init = (function() {
 			
      this.updatePos();
-			
-	});
-	
-	Game.prototype.controlReceiver = (function(event, direction) {
-			
-			if(event == "dPad") this.walk(direction)
 			
 	});	
 	
@@ -80,6 +74,13 @@
 	
 		return this.controlReceiver(event, direction);
 		
+	});
+	
+	// Control Receiver
+	Game.prototype.controlReceiver = (function(event, direction) {
+			
+			if(event == "dPad") this.walk(direction)
+			
 	});
 	
 	window.Game = Game;
