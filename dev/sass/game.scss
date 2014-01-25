@@ -22,6 +22,7 @@ body{
   z-index: 1;
   display: block;
   width: 100%; height: 100%;
+  overflow: hidden;
   
   @include transform(scale(1));
   @include perspective(800px);
@@ -63,9 +64,28 @@ body{
   left: 0px; top: 0px;
   display: block;
   width: 20px; height: 20px;
-  background: #FFF;
+  background: rgba(0,0,0,0.6);
   margin: -10px 0 0 -10px;
-  @include border-radius(10px);
+  
+  @include border-radius(2px);
+  @include box-shadow (0 0 3px rgba(0,0,0,0.6));
+  @include transform-style(preserve-3d);
+  
+  ul{
+    $width: 20px; $height: 20px; $depth: 20px;
+    $x: 0px; $y: 0px; $z: 5px;
+    $rx: 0deg; $ry: 0deg; $rz: 0deg;
+    @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
+    
+    li{
+      opacity: 0.9;
+      background: rgba(0,0,0,0.9) !important;
+    }
+    
+    li:nth-child(2){
+      background: rgba(255,255,255,0.9) !important;
+    }
+  }
 }
 
 span{
@@ -94,7 +114,7 @@ span{
 }
 
 #box_4{
-  $width: 80px; $height: 123px; $depth: 160px;
+  $width: 80px; $height: 132px; $depth: 160px;
   $x: 200px; $y: 20px; $z: -100px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
@@ -129,16 +149,16 @@ span{
 }
 
 #box_9{
-  $width: 131px; $height: 20px; $depth: 80px;
-  $x: 73px; $y: 20px; $z: 44px;
-  $rx: 0deg; $ry: 37deg; $rz: 0deg;
+  $width: 124px; $height: 20px; $depth: 80px;
+  $x: 78px; $y: 20px; $z: 49px;
+  $rx: 0deg; $ry: 34deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_10{
   $width: 144px; $height: 20px; $depth: 80px;
-  $x: 275px; $y: 100px; $z: -8px;
-  $rx: 0deg; $ry: 9.33deg; $rz: 0deg;
+  $x: 275px; $y: 100px; $z: -2px;
+  $rx: 0deg; $ry: 14deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 

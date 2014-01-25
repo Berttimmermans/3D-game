@@ -4,6 +4,7 @@
   	return {
   	  pos: { x: 460, y: 320, z: 0 },
   	  speed: 2,
+  	  size: 20,
     	mode: "moving",
     	directory: "img/LVL-1-logic-map.png"
   	}
@@ -40,30 +41,58 @@
 	// Walk through world if possible
 	Game.prototype.walk = (function(direction){
 	
+	  direction = this.remap(direction.x, direction.y);
+	  
     var check = this.readMap(direction.x, direction.y);
     check = (check != false)? check : this.readMap(0, direction.y);
     check = (check != false)? check : this.readMap(direction.x, 0);
-    if(check.x == 0 && check.y == 0) return false;
+    if(check == false || check.x == 0 && check.y == 0) return false;
     if((check.z-this.d.pos.z) > 10) return false;
     this.d.pos = check;
     this.updatePos();
     
 	});
 	
+	
+	Game.prototype.remap = (function(x,y){
+	
+	  if(y == -1 && x == 0) return { x:-1, y:-1 };
+	  if(y == 1 && x == 0) return { x:1, y:1 };
+	  if(y == 0 && x == 1) return { x:1, y:-1 };
+	  if(y == 0 && x == -1) return { x:-1, y:1 };
+	  
+	  if(y == -1 && x == -1) return { x:-1, y:0 };
+	  if(y == 1 && x == 1) return { x:1, y:0 };
+	  
+	  if(y == -1 && x == 1) return { x:0, y:-1 };
+	  if(y == 1 && x == -1) return { x:0, y:1 };
+	  
+	  
+    return {x:x, y:y};
+	  
+	});
+	
 	// visually move charachter
 	Game.prototype.updatePos = (function(){
 	
-	  this.charachter.style.webkitTransform = "translate3D("+this.d.pos.x+"px,"+this.d.pos.y+"px,"+this.d.pos.z+"px)";
+	  this.charachter.style.webkitTransform = this.charachter.style.MozTransform  = "translate3D("+this.d.pos.x+"px,"+this.d.pos.y+"px,"+this.d.pos.z+"px)";
 	  
 	});
 	
 	// Read map pixel and return false or new location
 	Game.prototype.readMap = (function(x,y){
 	
-	  var x = this.d.pos.x+x;
-    var y = this.d.pos.y+y;
-		var pixel = this.logicMapContext.getImageData(x, y, 1, 1).data; 
-    if(pixel[0] == pixel[1] && pixel[1] == pixel[2]) return { x:x, y:y, z:parseInt(-pixel[0]/(2.55)+100) }  
+	  var testX = this.d.pos.x+(x*(this.d.size/2));
+    var testY = this.d.pos.y+(y*(this.d.size/2));
+		var testP = this.logicMapContext.getImageData(testX, testY, 1, 1).data;
+		var testZ = parseInt(-testP[0]/(2.55)+100);
+		
+		x = this.d.pos.x+x;
+		y = this.d.pos.y+y; 
+		z = this.logicMapContext.getImageData(x, y, 1, 1).data;
+		z = parseInt(-z[0]/(2.55)+100);
+		
+    if(testP[0] == testP[1] && testP[1] == testP[2] && (testZ-this.d.pos.z) <= 10 ) return { x:x, y:y, z:z }  
     return false; 
     
 	});
