@@ -1,4 +1,4 @@
-@mixin box($width,$height,$depth,$x,$y,$z){
+@mixin box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz){
 
   display: block;
   width: $width; height: $depth;
@@ -6,7 +6,7 @@
   top:0px; left: 0px;
   
   @include transform-style(preserve-3d);
-  @include transform( translate3d($x,$y,$z) );
+  @include transform( translate3d($x,$y,$z) rotateX($rx) rotateY($ry) rotateZ($rz));
     
   li{
     position: absolute;

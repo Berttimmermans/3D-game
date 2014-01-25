@@ -32,6 +32,8 @@
 	Game.prototype.init = (function() {
 			
      this.updatePos();
+     
+     //console.log("width:" + Math.sqrt(Math.pow(76,2)+Math.pow(80,2)));
 			
 	});	
 	
@@ -42,6 +44,7 @@
     check = (check != false)? check : this.readMap(0, direction.y);
     check = (check != false)? check : this.readMap(direction.x, 0);
     if(check.x == 0 && check.y == 0) return false;
+    if((check.z-this.d.pos.z) > 10) return false;
     this.d.pos = check;
     this.updatePos();
     
@@ -50,8 +53,7 @@
 	// visually move charachter
 	Game.prototype.updatePos = (function(){
 	
-	  var z = (this.d.pos.z+100)/100;
-	  this.charachter.style.webkitTransform = "translate("+this.d.pos.x+"px,"+this.d.pos.y+"px) scale("+z+")";
+	  this.charachter.style.webkitTransform = "translate3D("+this.d.pos.x+"px,"+this.d.pos.y+"px,"+this.d.pos.z+"px)";
 	  
 	});
 	
