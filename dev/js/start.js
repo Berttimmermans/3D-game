@@ -10,5 +10,9 @@ $(document).ready(function(){
 	// Touch controls
 	var touch = new Touch(game);
 	touch.init();
+
+	// Motion controls
+	// var motion = new Motion(game);
+	// motion.init();
     
 });

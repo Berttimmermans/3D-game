@@ -26,6 +26,7 @@ body{
   
   @include transform(scale(1));
   @include perspective(800px);
+  //@include perspective-origin(50% 70%);
 }
 
 @media screen and (device-aspect-ratio: 40/71) {
@@ -40,6 +41,11 @@ body{
   }
 }
 
+@media screen and (device-aspect-ratio: 2/3) {
+  .mask{
+    @include transform(scale(0.4));
+  }
+}
 
 .camera{
   display: block;

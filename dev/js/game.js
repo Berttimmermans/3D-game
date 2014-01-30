@@ -48,6 +48,7 @@
     check = (check != false)? check : this.readMap(direction.x, 0);
     if(check == false || check.x == 0 && check.y == 0) return false;
     if((check.z-this.d.pos.z) > 10) return false;
+    if((check.z-this.d.pos.z) < -10) ;
     this.d.pos = check;
     this.updatePos();
     
