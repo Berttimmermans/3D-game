@@ -11,7 +11,7 @@ html {
 }
 
 body{
-  background: #222;
+  background: #111;
   font-family: "helvetica neue";
   color: #FFF;
   overflow: hidden;
@@ -22,28 +22,27 @@ body{
   z-index: 1;
   display: block;
   width: 100%; height: 100%;
-  overflow: hidden;
   
   @include transform(scale(1));
   @include perspective(800px);
-  //@include perspective-origin(50% 70%);
+  
 }
 
 @media screen and (device-aspect-ratio: 40/71) {
   .mask{
-    @include transform(scale(0.4));
+    @include transform(scale(0.35));
   }
 }
 
 @media screen and (device-aspect-ratio: 3/4) {
   .mask{
-    @include transform(scale(0.8));
+    @include transform(scale(0.7));
   }
 }
 
 @media screen and (device-aspect-ratio: 2/3) {
   .mask{
-    @include transform(scale(0.4));
+    @include transform(scale(0.35));
   }
 }
 
@@ -51,17 +50,23 @@ body{
   display: block;
   position: absolute;
   left: 50%; top:50%;
+  width: 0px; height: 0px;
+
+  -webkit-animation-name: rotate;
+	-webkit-animation-duration: 10s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear; 
 
   @include transform-style(preserve-3d);
-  @include transform(rotateX(45deg));
+  @include transform(translateY(50px) rotateX(-45deg) rotateY(-45deg) rotateZ(0deg));
 }
 
 .map {
   display: block;
-  width: 520px; height: 640px;
-  //background: url(img/LVL-1-mini-map.png);
+  width: 520px; height: 200px;
+  opacity: 1;
   
-  @include transform(translate3D(-260px, -320px, 240px) rotateZ(45deg));
+  @include transform(translate3D(-260px,-100px, -320px));
   @include transform-style(preserve-3d);
 }
 
@@ -70,26 +75,18 @@ body{
   left: 0px; top: 0px;
   display: block;
   width: 20px; height: 20px;
-  background: rgba(0,0,0,0.6);
-  margin: -10px 0 0 -10px;
   
   @include border-radius(2px);
-  @include box-shadow (0 0 3px rgba(0,0,0,0.6));
   @include transform-style(preserve-3d);
   
   ul{
     $width: 20px; $height: 20px; $depth: 20px;
-    $x: 0px; $y: 0px; $z: 5px;
+    $x: -10px; $y: 0px; $z: -10px;
     $rx: 0deg; $ry: 0deg; $rz: 0deg;
     @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
     
-    li{
-      opacity: 0.9;
-      background: rgba(0,0,0,0.9) !important;
-    }
-    
-    li:nth-child(2){
-      background: rgba(255,255,255,0.9) !important;
+    li:nth-child(5){
+    background: lighten(#000, 80) !important;
     }
   }
 }
@@ -98,94 +95,114 @@ span{
   display: none;
 }
 
+li{
+  display: none;
+  border-color: #333 !important;
+}
+
 #box_1{
   $width: 80px; $height: 200px; $depth: 340px;
-  $x: 20px; $y: 20px; $z: -100px;
+  $x: 20px; $y: 0px; $z: 20px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
+  
+  li {
+    display: block;
+  }
 }
 
 #box_2{
   $width: 80px; $height: 142px; $depth: 80px;
-  $x: 20px; $y: 540px; $z: -100px;
+  $x: 20px; $y: 0px; $z: 540px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_3{
   $width: 80px; $height: 100px; $depth: 520px;
-  $x: 420px;  $y: 100px; $z: -100px;
+  $x: 420px;  $y: 0px; $z: 100px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_4{
   $width: 80px; $height: 132px; $depth: 160px;
-  $x: 200px; $y: 20px; $z: -100px;
+  $x: 200px; $y: 0px; $z: 20px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
+
 #box_5{
   $width: 80px; $height: 173px; $depth: 80px;
-  $x: 100px; $y: 280px; $z: -100px;
+  $x: 100px; $y: 0px; $z: 280px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_6{
   $width: 80px; $height: 151px; $depth: 80px;
-  $x: 180px; $y: 280px; $z: -100px;
+  $x: 180px; $y: 0px; $z: 280px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_7{
   $width: 80px; $height: 133px; $depth: 80px;
-  $x: 260px; $y: 280px; $z: -100px;
+  $x: 260px; $y: 0px; $z: 280px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_8{
   $width: 80px; $height: 116px; $depth: 80px;
-  $x: 340px; $y: 280px; $z: -100px;
+  $x: 340px; $y: 0px; $z: 280px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_9{
-  $width: 124px; $height: 20px; $depth: 80px;
-  $x: 78px; $y: 20px; $z: 49px;
-  $rx: 0deg; $ry: 34deg; $rz: 0deg;
+  $width: 140px; $height: 20px; $depth: 80px;
+  $x: 53px; $y: -151px; $z: 20px;
+  $rx: 0deg; $ry: 0deg; $rz: 35deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_10{
-  $width: 144px; $height: 20px; $depth: 80px;
-  $x: 275px; $y: 100px; $z: -2px;
-  $rx: 0deg; $ry: 14deg; $rz: 0deg;
+  $width: 154px; $height: 20px; $depth: 80px;
+  $x: 263px; $y: -97px; $z:  100px;
+  $rx: 0deg; $ry: 0deg; $rz: 13deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_11{
-  $width: 80px; $height: 20px; $depth: 190px;
-  $x: 20px; $y: 350px; $z: 53px;
+  $width: 80px; $height: 20px; $depth: 196px;
+  $x: 20px; $y: -186px; $z: 324px;
   $rx: -17.86deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
 #box_12{
-  $width: 325px; $height: 20px; $depth: 80px;
-  $x: 96px; $y: 540px; $z: 1px;
-  $rx: 0deg; $ry: 7.5deg; $rz: 0deg;
+  $width: 328px; $height: 20px; $depth: 80px;
+  $x: 90px; $y: -101px; $z: 540px;
+  $rx: 0deg; $ry: 0deg; $rz: 7.5deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
+
 body .platform{
-  li:nth-child(2){
-    background: rgba(255,255,255,0.9) !important;
+  li:nth-child(5){
+    background: lighten(#000, 60) !important;
   }
+}
+			
+@-webkit-keyframes rotatetest {
+	0% {
+    @include transform(translateY(100px) rotateX(-45deg) rotateY(0deg));	
+	}
+	100% {
+    @include transform(translateY(100px) rotateX(-45deg) rotateY(360deg));
+	}
 }
 
 

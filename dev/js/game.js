@@ -28,6 +28,8 @@
     }
     image.src = this.d.directory;
     
+    console.log($('.camera').width() +"-"+ $('.camera').height());
+    
 	};
 
 	Game.prototype.init = (function() {
@@ -76,7 +78,7 @@
 	// visually move charachter
 	Game.prototype.updatePos = (function(){
 	
-	  this.charachter.style.webkitTransform = this.charachter.style.MozTransform  = "translate3D("+this.d.pos.x+"px,"+this.d.pos.y+"px,"+this.d.pos.z+"px)";
+	  this.charachter.style.webkitTransform = this.charachter.style.MozTransform  = "translate3D("+this.d.pos.x+"px,"+(-100-this.d.pos.z)+"px,"+this.d.pos.y+"px)";
 	  
 	});
 	
