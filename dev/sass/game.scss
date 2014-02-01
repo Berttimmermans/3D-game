@@ -23,26 +23,26 @@ body{
   display: block;
   width: 100%; height: 100%;
   
-  @include transform(scale(1));
-  @include perspective(800px);
+  @include transform(scale(3));
+  @include perspective(300px);
   
 }
 
 @media screen and (device-aspect-ratio: 40/71) {
   .mask{
-    @include transform(scale(0.35));
+    @include transform(scale(1.5));
   }
 }
 
 @media screen and (device-aspect-ratio: 3/4) {
   .mask{
-    @include transform(scale(0.7));
+    @include transform(scale(2.5));
   }
 }
 
 @media screen and (device-aspect-ratio: 2/3) {
   .mask{
-    @include transform(scale(0.35));
+    @include transform(scale(1.5));
   }
 }
 
@@ -58,15 +58,15 @@ body{
 	-webkit-animation-timing-function: linear; 
 
   @include transform-style(preserve-3d);
-  @include transform(translateY(50px) rotateX(-45deg) rotateY(-45deg) rotateZ(0deg));
+  @include transform(translateY(0px) rotateX(-45deg) rotateY(-45deg));
 }
 
 .map {
   display: block;
-  width: 520px; height: 200px;
+  width: 520px; height: 200px;  
   opacity: 1;
   
-  @include transform(translate3D(-260px,-100px, -320px));
+  //@include transform(translate3D(-260px,-100px, -320px));
   @include transform-style(preserve-3d);
 }
 
@@ -76,8 +76,8 @@ body{
   display: block;
   width: 20px; height: 20px;
   
-  @include border-radius(2px);
   @include transform-style(preserve-3d);
+  @include transform(translate3D(0px,0px,0px));
   
   ul{
     $width: 20px; $height: 20px; $depth: 20px;
@@ -186,6 +186,13 @@ li{
   $width: 328px; $height: 20px; $depth: 80px;
   $x: 90px; $y: -101px; $z: 540px;
   $rx: 0deg; $ry: 0deg; $rz: 7.5deg;
+  @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
+}
+
+#box_13{
+  $width: 520px; $height: 0px; $depth: 640px;
+  $x: 0px; $y: 0px; $z: 0px;
+  $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 

@@ -14,6 +14,7 @@
 	
 		this.d = defaultData();
     this.charachter = $('.charachter')[0];
+    this.map = $('.map')[0];
     
     this.logicMap = document.createElement('canvas');
     this.logicMapContext = this.logicMap.getContext('2d');	
@@ -78,7 +79,7 @@
 	// visually move charachter
 	Game.prototype.updatePos = (function(){
 	
-	  this.charachter.style.webkitTransform = this.charachter.style.MozTransform  = "translate3D("+this.d.pos.x+"px,"+(-100-this.d.pos.z)+"px,"+this.d.pos.y+"px)";
+	  this.map.style.webkitTransform = this.map.style.MozTransform  = "translate3D(-"+this.d.pos.x+"px,"+(100+this.d.pos.z)+"px,-"+this.d.pos.y+"px)";
 	  
 	});
 	
