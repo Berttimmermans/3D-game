@@ -15,7 +15,7 @@
 			
 			var self = this;
 			
-			$(document).keydown(function (e) {
+			window.onkeydown = function (e) {
 			
 			  var key = e.which;
 			  
@@ -30,9 +30,9 @@
           }, self.interval); 
 				} 
 				
-			});
+			};
 
-			$(document).keyup(function (e) {
+			window.onkeyup = function (e) {
 			
 			  var key = e.which;
 			  
@@ -43,7 +43,7 @@
 				  return self.game.dPad(self.pos); 
 				}
 				
-			});
+			};
 			
 			return;
 			

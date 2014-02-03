@@ -28,26 +28,36 @@
 			
 		var self = this;
 		
-		$('body').append('<div class="controls"></div>');
-		$('.controls').append('<div id="dPad"><div id="dPad-stick"></div></</div>');
+		var controls = document.createElement("div");
+		controls.className = "controls";
+		document.body.appendChild(controls);
 		
-		$("body").bind("touchstart", function(event) { 
+		var dPad = document.createElement("div");
+		dPad.id = "dPad";
+		var dPadStick = document.createElement("div");
+		dPadStick.id = "dPad-stick";
+		dPad.appendChild(dPadStick);
+		controls.appendChild(dPad);
+		
+		document.body.addEventListener("touchstart", function() {
 			 return event.preventDefault(); 
-		});
+    }, false);
 		
-		$("#dPad").bind("touchstart", function(){ 
+		dPad.addEventListener("touchstart", function(){ 
 		
 		  self.update = setInterval(function(){
 		    return self.game.dPad(self.pos); 
 		  }, self.interval); 
-			$(this).addClass('active');
+			dPad.classList.add('active');
 			
-		}).bind("touchmove", function(event) {
+		}, false);
 		
-      var touchX = event.originalEvent.touches[0].pageX;
-      var touchY = event.originalEvent.touches[0].pageY;
+		dPad.addEventListener("touchmove", function(event) {
+		
+      var touchX = event.changedTouches[0].pageX;
+      var touchY = event.changedTouches[0].pageY;
       
-      var pos = $(this).position();
+      var pos = { left : dPad.offsetLeft, top : dPad.offsetTop }; 
       
       var x = (touchX - pos.left)-self.size/2;
       var y = (touchY - pos.top)-self.size/2;
@@ -64,15 +74,17 @@
       self.pos.y = (y < -(self.size/8))? -1 : (y > (self.size/8))? 1 : 0;
       
 			 
-		}).bind("touchend", function() { 
+		}, false);
+		
+		dPad.addEventListener("touchend", function(event) {
 		
 		  clearInterval(self.update);
-			$('.controls .active').removeClass('active');
+			dPad.classList.remove('active');
       self.pos = { x: 0, y: 0 };
 			self.translate(0,0);
       return self.game.dPad(self.pos); 
 			
-		})
+		}, false);
 		
 		return;
 			

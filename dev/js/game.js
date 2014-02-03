@@ -13,15 +13,13 @@
 	function Game(){
 	
 		this.d = defaultData();
-    this.charachter = $('.charachter')[0];
-    this.map = $('.map')[0];
-    
+    this.charachter = document.getElementById('charachter');
+    this.map = document.getElementById('map');
     this.logicMap = document.createElement('canvas');
     this.logicMapContext = this.logicMap.getContext('2d');	
     
     var image = new Image();
     var self = this;
-    
     image.onload = function() {
   		self.logicMap.width = this.width;
 			self.logicMap.height = this.height;
@@ -29,17 +27,22 @@
     }
     image.src = this.d.directory;
     
-    console.log($('.camera').width() +"-"+ $('.camera').height());
-    
 	};
 
 	Game.prototype.init = (function() {
 			
      this.updatePos();
-     
-     //console.log("width:" + Math.sqrt(Math.pow(76,2)+Math.pow(80,2)));
-			
-	});	
+  
+  });	
+	
+	// Direction buttons
+	Game.prototype.dPad = (function(direction){ return this.controlDispatcher("dPad", direction); });
+	
+	// Control Dispatcher
+	Game.prototype.controlDispatcher = (function(event, direction){ return this.controlReceiver(event, direction); });
+	
+	// Control Receiver
+	Game.prototype.controlReceiver = (function(event, direction) { if(event == "dPad") this.walk(direction) });
 	
 	// Walk through world if possible
 	Game.prototype.walk = (function(direction){
@@ -64,22 +67,11 @@
 	  if(y == 1 && x == 0) return { x:1, y:1 };
 	  if(y == 0 && x == 1) return { x:1, y:-1 };
 	  if(y == 0 && x == -1) return { x:-1, y:1 };
-	  
 	  if(y == -1 && x == -1) return { x:-1, y:0 };
 	  if(y == 1 && x == 1) return { x:1, y:0 };
-	  
 	  if(y == -1 && x == 1) return { x:0, y:-1 };
 	  if(y == 1 && x == -1) return { x:0, y:1 };
-	  
-	  
     return {x:x, y:y};
-	  
-	});
-	
-	// visually move charachter
-	Game.prototype.updatePos = (function(){
-	
-	  this.map.style.webkitTransform = this.map.style.MozTransform  = "translate3D(-"+this.d.pos.x+"px,"+(100+this.d.pos.z)+"px,-"+this.d.pos.y+"px)";
 	  
 	});
 	
@@ -101,21 +93,11 @@
     
 	});
 	
-	// Direction buttons
-	Game.prototype.dPad = (function(direction){ return this.controlDispatcher("dPad", direction); });
+	// visually move charachter
+	Game.prototype.updatePos = (function(){
 	
-	// Control Dispatcher
-	Game.prototype.controlDispatcher = (function(event, direction){
-	
-		return this.controlReceiver(event, direction);
-		
-	});
-	
-	// Control Receiver
-	Game.prototype.controlReceiver = (function(event, direction) {
-			
-			if(event == "dPad") this.walk(direction)
-			
+	  this.map.style.webkitTransform = this.map.style.MozTransform  = "translate3D(-"+this.d.pos.x+"px,"+(100+this.d.pos.z)+"px,-"+this.d.pos.y+"px)";
+	  
 	});
 	
 	window.Game = Game;

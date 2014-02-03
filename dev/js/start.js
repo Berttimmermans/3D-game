@@ -1,4 +1,4 @@
-$(document).ready(function(){
+window.onload = function(){
     
   var game = new Game();
 	game.init();
@@ -15,4 +15,4 @@ $(document).ready(function(){
 	// var motion = new Motion(game);
 	// motion.init();
     
-});
+};

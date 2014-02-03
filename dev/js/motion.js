@@ -27,7 +27,7 @@
     		self.pos.x = (self.apos.y > 0.5)? -1 : (self.apos.y < -0.5)? 1 : 0; 
     		self.pos.y = (self.apos.x > 0.5)? -1 : (self.apos.x < -0.5)? 1 : 0; 
 		    
-    		$('#dev-data').html("x= "+parseInt(self.pos.x)+" y= "+parseInt(self.pos.y));
+    		document.getElementById('#dev-data').innerHTML = "x= "+parseInt(self.pos.x)+" y= "+parseInt(self.pos.y);
     		
 		    return self.game.dPad(self.pos); 
     		
