@@ -5,6 +5,7 @@
   	  pos: { x: 460, y: 320, z: 0 },
   	  speed: 2,
   	  size: 20,
+  	  floor: 100,
     	mode: "moving",
     	directory: "img/LVL-1-logic-map.png"
   	}
@@ -29,11 +30,8 @@
     
 	};
 
-	Game.prototype.init = (function() {
-			
-     this.updatePos();
-  
-  });	
+  // Init game
+	Game.prototype.init = (function() { this.updatePos(); });	
 	
 	// Direction buttons
 	Game.prototype.dPad = (function(direction){ return this.controlDispatcher("dPad", direction); });
@@ -60,17 +58,18 @@
     
 	});
 	
-	
+
+  // remap input to fit rotation	
 	Game.prototype.remap = (function(x,y){
 	
-	  if(y == -1 && x == 0) return { x:-1, y:-1 };
-	  if(y == 1 && x == 0) return { x:1, y:1 };
-	  if(y == 0 && x == 1) return { x:1, y:-1 };
-	  if(y == 0 && x == -1) return { x:-1, y:1 };
-	  if(y == -1 && x == -1) return { x:-1, y:0 };
-	  if(y == 1 && x == 1) return { x:1, y:0 };
-	  if(y == -1 && x == 1) return { x:0, y:-1 };
-	  if(y == 1 && x == -1) return { x:0, y:1 };
+	  if(x == 0 && y == -1)   return { x:-1, y:-1 };
+	  if(x == 0 && y == 1)    return { x:1,  y:1 };
+	  if(x == 1 && y == 0)    return { x:1,  y:-1 };
+	  if(x == 1 && y == -1)   return { x:0,  y:-1 };
+	  if(x == -1 && y == 0)   return { x:-1, y:1 };
+	  if(x == -1 && y == 1)   return { x:0,  y:1 };
+	  if(y == -1 && x == -1)  return { x:-1, y:0 };
+	  if(y == 1 && x == 1)    return { x:1,  y:0 };
     return {x:x, y:y};
 	  
 	});
@@ -83,8 +82,8 @@
 		var testP = this.logicMapContext.getImageData(testX, testY, 1, 1).data;
 		var testZ = parseInt(-testP[0]/(2.55)+100);
 		
-		x = this.d.pos.x+x;
-		y = this.d.pos.y+y; 
+		x = this.d.pos.x+(x*this.d.speed);
+		y = this.d.pos.y+(y*this.d.speed); 
 		z = this.logicMapContext.getImageData(x, y, 1, 1).data;
 		z = parseInt(-z[0]/(2.55)+100);
 		
@@ -95,9 +94,7 @@
 	
 	// visually move charachter
 	Game.prototype.updatePos = (function(){
-	
-	  this.map.style.webkitTransform = this.map.style.MozTransform  = "translate3D(-"+this.d.pos.x+"px,"+(100+this.d.pos.z)+"px,-"+this.d.pos.y+"px)";
-	  
+	  this.map.style.webkitTransform = this.map.style.MozTransform  = "translate3D(-"+this.d.pos.x+"px,"+(this.d.floor+this.d.pos.z)+"px,-"+this.d.pos.y+"px)";
 	});
 	
 	window.Game = Game;

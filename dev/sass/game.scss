@@ -52,11 +52,6 @@ body{
   left: 50%; top:50%;
   width: 0px; height: 0px;
 
-  -webkit-animation-name: rotate;
-	-webkit-animation-duration: 10s;
-	-webkit-animation-iteration-count: infinite;
-	-webkit-animation-timing-function: linear; 
-
   @include transform-style(preserve-3d);
   @include transform(translateY(0px) rotateX(-45deg) rotateY(-45deg));
 }
@@ -81,12 +76,12 @@ body{
   
   ul{
     $width: 20px; $height: 20px; $depth: 20px;
-    $x: -10px; $y: 0px; $z: -10px;
+    $x: -10px; $y: -2px; $z: -10px;
     $rx: 0deg; $ry: 0deg; $rz: 0deg;
     @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
     
     li:nth-child(5){
-    background: lighten(#000, 80) !important;
+      background: lighten(#000, 80) !important;
     }
   }
 }
@@ -196,14 +191,20 @@ li{
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }
 
-
 body .platform{
   li:nth-child(5){
     background: lighten(#000, 60) !important;
   }
 }
+
+.rotate {
+  -webkit-animation-name: rotate;
+	-webkit-animation-duration: 10s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear; 
+}
 			
-@-webkit-keyframes rotatetest {
+@-webkit-keyframes rotate {
 	0% {
     @include transform(translateY(100px) rotateX(-45deg) rotateY(0deg));	
 	}
