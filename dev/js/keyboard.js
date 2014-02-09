@@ -6,6 +6,7 @@
 		this.pos = { x: 0, y: 0 };
 		this.update;
 		this.interval = 10;
+		this.action = false;
 		
 	};
 	
@@ -23,12 +24,17 @@
 				if (key == 39) self.pos.x = 1;
 				if (key == 40) self.pos.y = 1;
 				if (key == 37) self.pos.x = -1;
-				if(key == 38 || key == 39 || key == 40 || key == 37){
+				if (key == 38 || key == 39 || key == 40 || key == 37){
 				  clearInterval(self.update)
 				  self.update = setInterval(function(){
             return self.game.dPad(self.pos); 
           }, self.interval); 
 				} 
+				
+				if (key == 32 && self.action == false){
+				  self.action = true;
+				  self.game.actionButton();
+				}
 				
 			};
 
@@ -42,6 +48,7 @@
 				if(key == 38 || key == 39 || key == 40 || key == 37){
 				  return self.game.dPad(self.pos); 
 				}
+				if(key == 32) self.action = false;
 				
 			};
 			

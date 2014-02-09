@@ -42,8 +42,9 @@
   // Init game
 	Game.prototype.init = (function() { this.updatePos(); });	
 	
-	// Direction buttons
+	// Buttons
 	Game.prototype.dPad = (function(direction){ return this.controlDispatcher("dPad", direction); });
+	Game.prototype.actionButton = (function(){ return this.controlDispatcher("actionButton"); });
 	
 	// Control Dispatcher
 	Game.prototype.controlDispatcher = (function(event, direction){ 
@@ -51,7 +52,10 @@
   });
 	
 	// Control Receiver
-	Game.prototype.controlReceiver = (function(event, direction) { if(event == "dPad") this.walk(direction) });
+	Game.prototype.controlReceiver = (function(event, direction) { 
+	  if(event == "dPad") this.walk(direction) 
+	  if(event == "actionButton") console.log('A');  
+  });
 	
 	// Walk through world if possible
 	Game.prototype.walk = (function(direction){

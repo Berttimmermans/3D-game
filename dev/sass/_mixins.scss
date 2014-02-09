@@ -30,6 +30,22 @@
   
 }
 
+@mixin g-transition-property($data){
+  
+  -webkit-transition-property: $data;
+  -moz-transition-property: $data;
+  //transition-property: $data;
+  
+}
+
+@mixin g-transition-timing-function($data){
+  
+  -webkit-transition-timing-function: $data;
+  -moz-transition-timing-function: $data;
+  //transition-timing-function: $data;
+  
+}
+
 @mixin box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz){
 
   display: block;

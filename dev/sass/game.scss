@@ -64,9 +64,8 @@ body{
   @include g-transform-style(preserve-3d);
   
   &.transition{
-    @include transition-timing-function(ease-in);
-    //@include transition-duration(0.08s);
-    @include transition-property(all);
+    @include g-transition-timing-function(ease-in);
+    @include g-transition-property(all);
   }
 }
 

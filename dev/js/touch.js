@@ -39,6 +39,11 @@
 		dPad.appendChild(dPadStick);
 		controls.appendChild(dPad);
 		
+		var action = document.createElement("a");
+		action.id = "actionButton";
+		action.innerHTML = "A";
+		controls.appendChild(action);
+		
 		document.body.addEventListener("touchstart", function() {
 			 return event.preventDefault(); 
     }, false);
@@ -85,6 +90,15 @@
       return self.game.dPad(self.pos); 
 			
 		}, false);
+		
+		action.addEventListener("touchstart", function(){
+		  self.game.actionButton();
+			action.classList.add('active');
+		});
+		
+		action.addEventListener("touchend", function(){
+			action.classList.remove('active');
+		});
 		
 		return;
 			
