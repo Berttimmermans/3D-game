@@ -6,6 +6,7 @@
   	  speed: 1.5,
   	  size: 20,
   	  floor: 100,
+  	  gravity: 3,
     	mode: "moving",
     	directory: "img/LVL-1-logic-map.png"
   	}
@@ -71,14 +72,18 @@
     if(check == false || check.x == 0 && check.y == 0) return false;
     
     // check if the player will drop
-    if((check.z-this.d.pos.z) < -10) {
+    var dif = check.z-this.d.pos.z;
+    if(dif < -10) {
+      var s = -(dif*this.d.gravity);
       this.mode = "fall";
-      this.map.classList.add('fall');
+      this.map.classList.add('transition');
+      this.updateTiming(s/1000);
       var self = this;
       setTimeout(function(){
-        self.map.classList.remove('fall');
+        self.map.classList.remove('transition');
+        self.updateTiming(0);
         self.mode = "walk";
-      }, 80);
+      }, s);
     }
     
     // Update and move player
@@ -136,9 +141,14 @@
     
 	});
 	
-	// visually move charachter
+	// visually move map
 	Game.prototype.updatePos = (function(){
 	  this.map.style.webkitTransform = this.map.style.MozTransform  = "translate3D(-"+this.d.pos.x+"px,"+(this.d.floor+this.d.pos.z)+"px,-"+this.d.pos.y+"px)";
+	});
+	
+	// set transition timing for map
+	Game.prototype.updateTiming = (function(s){
+	  this.map.style['-webkit-transition-duration']  = this.map.style['-moz-transition-duration']  = s+"s";
 	});
 	
 	window.Game = Game;
