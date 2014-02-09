@@ -1,0 +1,90 @@
+@mixin g-transform($data){
+
+  -webkit-transform: $data;
+  -moz-transform: $data;
+  //transform: $data;
+  
+}
+
+@mixin g-backface-visibility($data){
+
+  -webkit-backface-visibility: $data;
+  -moz-backface-visibility: $data;
+  //backface-visibility: $data;
+  
+}
+
+@mixin g-transform-style($data){
+
+  -webkit-transform-style: $data;
+  -moz-transform-style: $data;
+  //transform-style: $data;
+  
+}
+
+@mixin g-perspective($data){
+
+  -webkit-perspective: $data;
+  -moz-perspective: $data;
+  //perspective: $data;
+  
+}
+
+@mixin box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz){
+
+  display: block;
+  width: $width; height: $depth;
+  position: absolute;
+  top:0px; left: 0px;
+  
+  @include g-transform-style(preserve-3d);
+  @include g-transform( translate3d($x,$y,$z) rotateX($rx) rotateY($ry) rotateZ($rz));
+    
+  li{
+    position: absolute;
+    left: 0px; top: 0px;
+    display: block;
+    background: #000;
+    text-align: center;
+    opacity: 1;
+    box-sizing: border-box;
+    border: 1px solid #FFF;
+    
+    @include g-backface-visibility(hidden);
+    
+    &:nth-child(1){
+      @include g-transform( translate3D(0,-$height,$depth));
+      width: $width; height: $height;
+      background: lighten(#000, 30);
+    }
+    &:nth-child(2){
+      @include g-transform( translate3D(0,-$height,0) rotateY(180deg));
+      width: $width; height: $height;
+    }
+    &:nth-child(3){
+      @include g-transform( translate3D(-$depth/2,-$height,$depth/2) rotateY(-90deg) );
+      width: $depth; height: $height;
+    }
+    &:nth-child(4){
+      @include g-transform( translate3D(-$depth/2+$width,-$height,$depth/2) rotateY(90deg) );
+      width: $depth; height: $height;
+      background: lighten(#000, 15);
+    }
+    &:nth-child(5){
+      @include g-transform( translate3D(0,-$depth/2-$height,$depth/2) rotateX(90deg));
+      width: $width; height: $depth;
+    }
+    &:nth-child(6){
+      @include g-transform( translate3D(0,-$depth/2,$depth/2) rotateX(-90deg));
+      width: $width; height: $depth;
+    }   
+    
+    span{
+      font-family: "helvetica";
+      font-size: 20px;
+      font-weight: bold;
+      color: rgba(100,100,100, 1);
+    }
+  }
+  
+}

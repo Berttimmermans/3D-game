@@ -1,6 +1,6 @@
 @import "compass/reset";
 @import "compass/css3";
-@import "objects";
+@import "mixins";
 
 @import "dev";
 @import "touch";
@@ -23,26 +23,26 @@ body{
   display: block;
   width: 100%; height: 100%;
   
-  @include transform(scale(3));
-  @include perspective(300px);
+  @include g-transform(scale(3));
+  @include g-perspective(300px);
   
 }
 
 @media screen and (device-aspect-ratio: 40/71) {
   .mask{
-    @include transform(scale(1.5));
+    @include g-transform(scale(1.5));
   }
 }
 
 @media screen and (device-aspect-ratio: 3/4) {
   .mask{
-    @include transform(scale(2.5));
+    @include g-transform(scale(2.5));
   }
 }
 
 @media screen and (device-aspect-ratio: 2/3) {
   .mask{
-    @include transform(scale(1.5));
+    @include g-transform(scale(1.5));
   }
 }
 
@@ -52,17 +52,21 @@ body{
   left: 50%; top:50%;
   width: 0px; height: 0px;
 
-  @include transform-style(preserve-3d);
-  @include transform(translateY(0px) rotateX(-45deg) rotateY(-45deg));
+  @include g-transform-style(preserve-3d);
+  @include g-transform(translateY(0px) rotateX(-45deg) rotateY(-45deg));
 }
 
 .map {
   display: block;
   width: 520px; height: 200px;  
   opacity: 1;
+
+  @include g-transform-style(preserve-3d);
   
-  //@include transform(translate3D(-260px,-100px, -320px));
-  @include transform-style(preserve-3d);
+  &.fall{
+    @include transition(all 0.08s);
+    @include transition-timing-function(ease-in);
+  }
 }
 
 .charachter{
@@ -71,8 +75,8 @@ body{
   display: block;
   width: 20px; height: 20px;
   
-  @include transform-style(preserve-3d);
-  @include transform(translate3D(0px,0px,0px));
+  @include g-transform-style(preserve-3d);
+  @include g-transform(translate3D(0px,0px,0px));
   
   ul{
     $width: 20px; $height: 20px; $depth: 20px;
@@ -206,10 +210,10 @@ body .platform{
 			
 @-webkit-keyframes rotate {
 	0% {
-    @include transform(translateY(100px) rotateX(-45deg) rotateY(0deg));	
+    @include g-transform(translateY(100px) rotateX(-45deg) rotateY(0deg));	
 	}
 	100% {
-    @include transform(translateY(100px) rotateX(-45deg) rotateY(360deg));
+    @include g-transform(translateY(100px) rotateX(-45deg) rotateY(360deg));
 	}
 }
 

@@ -2,8 +2,8 @@
 	
 	function defaultData(){
   	return {
-  	  pos: { x: 460, y: 320, z: 0 },
-  	  speed: 2,
+  	  pos: { x: 40, y: 320, z: 100 },
+  	  speed: 1.5,
   	  size: 20,
   	  floor: 100,
     	mode: "moving",
@@ -14,8 +14,16 @@
 	function Game(){
 	
 		this.d = defaultData();
+		this.mode = "walk";
     this.charachter = document.getElementById('charachter');
     this.map = document.getElementById('map');
+    this.buildLogicMap();
+    
+	};
+	
+	// Build logic map
+	Game.prototype.buildLogicMap = (function(){
+	
     this.logicMap = document.createElement('canvas');
     this.logicMapContext = this.logicMap.getContext('2d');	
     
@@ -28,7 +36,7 @@
     }
     image.src = this.d.directory;
     
-	};
+  });
 
   // Init game
 	Game.prototype.init = (function() { this.updatePos(); });	
@@ -37,7 +45,9 @@
 	Game.prototype.dPad = (function(direction){ return this.controlDispatcher("dPad", direction); });
 	
 	// Control Dispatcher
-	Game.prototype.controlDispatcher = (function(event, direction){ return this.controlReceiver(event, direction); });
+	Game.prototype.controlDispatcher = (function(event, direction){ 
+	  if(this.mode == "walk") return this.controlReceiver(event, direction); 
+  });
 	
 	// Control Receiver
 	Game.prototype.controlReceiver = (function(event, direction) { if(event == "dPad") this.walk(direction) });
@@ -45,14 +55,33 @@
 	// Walk through world if possible
 	Game.prototype.walk = (function(direction){
 	
+	  // Remap controls -> TO DO: make this be based on rotation
 	  direction = this.remap(direction.x, direction.y);
 	  
+	  // Check if X and Y are possible
     var check = this.readMap(direction.x, direction.y);
+    
+    // If X and Y are not possible check only Y
     check = (check != false)? check : this.readMap(0, direction.y);
+    
+    // If Y is not possible only check X
     check = (check != false)? check : this.readMap(direction.x, 0);
+    
+    // Check if we have a new destination
     if(check == false || check.x == 0 && check.y == 0) return false;
-    if((check.z-this.d.pos.z) > 10) return false;
-    if((check.z-this.d.pos.z) < -10) ;
+    
+    // check if the player will drop
+    if((check.z-this.d.pos.z) < -10) {
+      this.mode = "fall";
+      this.map.classList.add('fall');
+      var self = this;
+      setTimeout(function(){
+        self.map.classList.remove('fall');
+        self.mode = "walk";
+      }, 80);
+    }
+    
+    // Update and move player
     this.d.pos = check;
     this.updatePos();
     
@@ -76,18 +105,33 @@
 	
 	// Read map pixel and return false or new location
 	Game.prototype.readMap = (function(x,y){
-	
-	  var testX = this.d.pos.x+(x*(this.d.size/2));
-    var testY = this.d.pos.y+(y*(this.d.size/2));
-		var testP = this.logicMapContext.getImageData(testX, testY, 1, 1).data;
-		var testZ = parseInt(-testP[0]/(2.55)+100);
+	  
+	  // Check in front of real new destination
+	  var frontX = this.d.pos.x+((x*(this.d.size/2))+(x*this.d.speed));
+    var frontY = this.d.pos.y+((y*(this.d.size/2))+(y*this.d.speed));
+		var frontData = this.logicMapContext.getImageData(frontX, frontY, 1, 1).data;
+		var frontZ = parseInt(-frontData[0]/(2.55)+100);
+		if(frontData[0] != frontData[1] || frontData[1] != frontData[2]) return false;
 		
-		x = this.d.pos.x+(x*this.d.speed);
-		y = this.d.pos.y+(y*this.d.speed); 
-		z = this.logicMapContext.getImageData(x, y, 1, 1).data;
-		z = parseInt(-z[0]/(2.55)+100);
+		// Check real new destination
+		var desX = this.d.pos.x+(x*this.d.speed);
+		var desY = this.d.pos.y+(y*this.d.speed); 
+		var desData = this.logicMapContext.getImageData(desX, desY, 1, 1).data;
+		var desZ = parseInt(-desData[0]/(2.55)+100);
+		if(desData[0] != desData[1] || desData[1] != desData[2]) return false;
 		
-    if(testP[0] == testP[1] && testP[1] == testP[2] && (testZ-this.d.pos.z) <= 10 ) return { x:x, y:y, z:z }  
+		// Check back of real new destination if new z is lower then old Z
+		if((this.d.pos.z-desZ) > 0) {
+  		var backX = desX-(this.d.size/2);
+  		var backY = desY-(this.d.size/2);
+      var backData = this.logicMapContext.getImageData(backX, backY, 1, 1).data;
+      desZ = parseInt(-backData[0]/(2.55)+100); 
+		}
+		
+		// Check if new z difference is lower then 10
+    if( (frontZ-this.d.pos.z) <= 10 ) return { x:desX, y:desY, z:desZ } 
+    
+    // If new z is to high to move on to 
     return false; 
     
 	});
