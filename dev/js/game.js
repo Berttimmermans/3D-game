@@ -7,6 +7,8 @@
   	  size: 20,
   	  floor: 100,
   	  gravity: 3,
+  	  jumpHeight: 30,
+  	  jumpY: 0,
     	mode: "moving",
     	directory: "img/LVL-1-logic-map.png"
   	}
@@ -54,7 +56,7 @@
 	// Control Receiver
 	Game.prototype.controlReceiver = (function(event, direction) { 
 	  if(event == "dPad") this.walk(direction) 
-	  if(event == "actionButton") console.log('A');  
+	  if(event == "actionButton") this.jump();  
   });
 	
 	// Walk through world if possible
@@ -75,11 +77,12 @@
     // Check if we have a new destination
     if(check == false || check.x == 0 && check.y == 0) return false;
     
-    // check if the player will drop
+    // Smooth Z when difference is large enough
     var dif = check.z-this.d.pos.z;
-    if(dif < -10) {
-      var s = -(dif*this.d.gravity);
-      this.mode = "fall";
+    console.log(dif);
+    if(dif < -3 || dif > 3) {
+      var s = (dif < 0)? -(dif*this.d.gravity) : dif*this.d.gravity;
+      this.mode = "smooth";
       this.map.classList.add('transition');
       this.updateTiming(s/1000);
       var self = this;
@@ -138,11 +141,40 @@
 		}
 		
 		// Check if new z difference is lower then 10
-    if( (frontZ-this.d.pos.z) <= 10 ) return { x:desX, y:desY, z:desZ } 
+    if( (frontZ-(this.d.pos.z+this.d.jumpY)) <= 10 ) return { x:desX, y:desY, z:desZ } 
     
     // If new z is to high to move on to 
     return false; 
     
+	});
+	
+	// Jump
+	Game.prototype.jump = (function(){
+	
+	  if(this.d.jumpY != 0) return false;
+	  
+	  var self = this;
+    var currentTime = 0;
+    var time = self.d.jumpHeight*self.d.gravity*self.d.gravity;
+    var speed = time/self.d.jumpHeight;
+
+    var inter = setInterval(function () {
+    
+      self.d.jumpY = parseInt(getHeightAtX(currentTime));
+      if (self.d.jumpY < 0) {
+        self.d.jumpY = 0;
+        clearInterval(inter);
+      }
+      currentTime += speed;
+      self.translateCharachter(0,-self.d.jumpY/2,0);
+      self.updatePos();
+    
+    }, speed);
+
+    function getHeightAtX(current) {
+      return self.d.jumpHeight*Math.sin(current*Math.PI/time)   
+    }
+	
 	});
 	
 	// visually move map
@@ -153,6 +185,11 @@
 	// set transition timing for map
 	Game.prototype.updateTiming = (function(s){
 	  this.map.style['-webkit-transition-duration']  = this.map.style['-moz-transition-duration']  = s+"s";
+	});
+	
+	// visually jump charachter
+	Game.prototype.translateCharachter = (function(x,y,z){
+	  this.charachter.style.webkitTransform = this.charachter.style.MozTransform  = "translate3D("+x+"px,"+y+"px,"+z+"px)";
 	});
 	
 	window.Game = Game;

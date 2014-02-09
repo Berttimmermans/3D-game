@@ -80,7 +80,7 @@ body{
   
   ul{
     $width: 20px; $height: 20px; $depth: 20px;
-    $x: -10px; $y: -2px; $z: -10px;
+    $x: -10px; $y: 0px; $z: -10px;
     $rx: 0deg; $ry: 0deg; $rz: 0deg;
     @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
     
