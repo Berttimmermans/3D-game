@@ -189,8 +189,8 @@ li{
 }
 
 #box_13{
-  $width: 520px; $height: 0px; $depth: 640px;
-  $x: 0px; $y: 0px; $z: 0px;
+  $width: 320px; $height: 100px; $depth: 80px;
+  $x: 100px; $y: 0px; $z: 360px;
   $rx: 0deg; $ry: 0deg; $rz: 0deg;
   @include box($width,$height,$depth,$x,$y,$z,$rx,$ry,$rz);
 }

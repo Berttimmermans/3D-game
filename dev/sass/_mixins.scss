@@ -2,7 +2,7 @@
 
   -webkit-transform: $data;
   -moz-transform: $data;
-  //transform: $data;
+  transform: $data;
   
 }
 
@@ -10,7 +10,7 @@
 
   -webkit-backface-visibility: $data;
   -moz-backface-visibility: $data;
-  //backface-visibility: $data;
+  backface-visibility: $data;
   
 }
 
@@ -18,7 +18,7 @@
 
   -webkit-transform-style: $data;
   -moz-transform-style: $data;
-  //transform-style: $data;
+  transform-style: $data;
   
 }
 
@@ -26,7 +26,7 @@
 
   -webkit-perspective: $data;
   -moz-perspective: $data;
-  //perspective: $data;
+  perspective: $data;
   
 }
 
@@ -34,7 +34,7 @@
   
   -webkit-transition-property: $data;
   -moz-transition-property: $data;
-  //transition-property: $data;
+  transition-property: $data;
   
 }
 
@@ -42,7 +42,7 @@
   
   -webkit-transition-timing-function: $data;
   -moz-transition-timing-function: $data;
-  //transition-timing-function: $data;
+  transition-timing-function: $data;
   
 }
 

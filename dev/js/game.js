@@ -77,9 +77,8 @@
     // Check if we have a new destination
     if(check == false || check.x == 0 && check.y == 0) return false;
     
-    // Smooth Z when difference is large enough
+    // Smooth Z when difference is large
     var dif = check.z-this.d.pos.z;
-    console.log(dif);
     if(dif < -3 || dif > 3) {
       var s = (dif < 0)? -(dif*this.d.gravity) : dif*this.d.gravity;
       this.mode = "smooth";
@@ -141,7 +140,7 @@
 		}
 		
 		// Check if new z difference is lower then 10
-    if( (frontZ-(this.d.pos.z+this.d.jumpY)) <= 10 ) return { x:desX, y:desY, z:desZ } 
+    if( (frontZ-(this.d.pos.z+this.d.jumpY)) <= 10 &&  (desZ-(this.d.pos.z+this.d.jumpY)) <= 10) return { x:desX, y:desY, z:desZ } 
     
     // If new z is to high to move on to 
     return false; 
@@ -166,7 +165,7 @@
         clearInterval(inter);
       }
       currentTime += speed;
-      self.translateCharachter(0,-self.d.jumpY/2,0);
+      self.translateCharachter(0,-self.d.jumpY,0);
       self.updatePos();
     
     }, speed);
