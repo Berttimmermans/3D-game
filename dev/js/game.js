@@ -2,7 +2,7 @@
 	
 	function defaultData(){
   	return {
-  	  pos: { x: 40, y: 320, z: 100 },
+  	  pos: { x: 30, y: 320, z: 100 },
   	  speed: 1.5,
   	  size: 20,
   	  floor: 100,
@@ -66,13 +66,13 @@
 	  direction = this.remap(direction.x, direction.y);
 	  
 	  // Check if X and Y are possible
-    var check = this.readMap(direction.x, direction.y);
+    var check = this.checkPosition(direction.x, direction.y);
     
     // If X and Y are not possible check only Y
-    check = (check != false)? check : this.readMap(0, direction.y);
+    check = (check != false)? check : this.checkPosition(0, direction.y);
     
     // If Y is not possible only check X
-    check = (check != false)? check : this.readMap(direction.x, 0);
+    check = (check != false)? check : this.checkPosition(direction.x, 0);
     
     // Check if we have a new destination
     if(check == false || check.x == 0 && check.y == 0) return false;
@@ -114,38 +114,40 @@
 	  
 	});
 	
-	// Read map pixel and return false or new location
-	Game.prototype.readMap = (function(x,y){
-	  
-	  // Check in front of real new destination
-	  var frontX = this.d.pos.x+((x*(this.d.size/2))+(x*this.d.speed));
-    var frontY = this.d.pos.y+((y*(this.d.size/2))+(y*this.d.speed));
-		var frontData = this.logicMapContext.getImageData(frontX, frontY, 1, 1).data;
-		var frontZ = parseInt(-frontData[0]/(2.55)+100);
-		if(frontData[0] != frontData[1] || frontData[1] != frontData[2]) return false;
-		
-		// Check real new destination
-		var desX = this.d.pos.x+(x*this.d.speed);
-		var desY = this.d.pos.y+(y*this.d.speed); 
-		var desData = this.logicMapContext.getImageData(desX, desY, 1, 1).data;
-		var desZ = parseInt(-desData[0]/(2.55)+100);
-		if(desData[0] != desData[1] || desData[1] != desData[2]) return false;
-		
-		// Check back of real new destination if new z is lower then old Z
-		if((this.d.pos.z-desZ) > 0) {
-  		var backX = desX-(this.d.size/2);
-  		var backY = desY-(this.d.size/2);
-      var backData = this.logicMapContext.getImageData(backX, backY, 1, 1).data;
-      desZ = parseInt(-backData[0]/(2.55)+100); 
-		}
-		
-		// Check if new z difference is lower then 10
-    if( (frontZ-(this.d.pos.z+this.d.jumpY)) <= 10 &&  (desZ-(this.d.pos.z+this.d.jumpY)) <= 10) return { x:desX, y:desY, z:desZ } 
-    
-    // If new z is to high to move on to 
-    return false; 
-    
-	});
+	
+	// Check position
+	Game.prototype.checkPosition = (function(x,y){
+  	
+  	x = this.d.pos.x+(x*this.d.speed); 
+  	y = this.d.pos.y+(y*this.d.speed);
+  	d = []; 
+  	c = 0;
+  	size = this.d.size/2;
+  	
+  	// Fetch all data + check for walls
+  	for (var i=-1;i<2;i++){
+    	for (var j=-1;j<2;j++){
+    	  d[c] = { x : x+(j*size), y : y+(i*size) };
+    	  p = this.logicMapContext.getImageData(d[c].x, d[c].y, 1, 1).data;
+    	  if( p[0] != p[1] || p[1] != p[2]) return false;
+    	  d[c].z = parseInt(-p[0]/(2.55)+100);
+    	  c++;
+    	}
+  	}
+  	
+  	// Check for to high Z index
+  	z = d[4].z
+  	maxZ = this.d.pos.z+this.d.jumpY;
+  	for (var i in d) if ((d[i].z-maxZ) >= 10) return false; 
+  	
+  	// Get The highest Z
+  	zHolder = [];
+  	for (var i in d) zHolder[i] = d[i].z;
+  	z = Math.max.apply(Math, zHolder);
+  	
+  	return { x:x, y:y, z:z }
+  	
+	})
 	
 	// Jump
 	Game.prototype.jump = (function(){
