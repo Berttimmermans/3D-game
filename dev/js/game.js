@@ -2,7 +2,7 @@
 	
 	function defaultData(){
   	return {
-  	  pos: { x: 30, y: 320, z: 100 },
+  	  pos: { x: 30, y: 100, z: 320 },
   	  cam: { rx: 315, ry: 315, rz: 0},
   	  speed: 1.5,
   	  size: 20,
@@ -70,20 +70,20 @@
 	  // Remap controls based on camera rotation
 	  direction = this.remap(direction.x, direction.y);
 	  
-	  // Check if X and Y are possible
-    var check = this.checkPosition(direction.x, direction.y);
+	  // Check if X and Z are possible
+    var check = this.checkPosition(direction.x, direction.z);
     
-    // If X and Y are not possible check only Y
-    check = (check != false)? check : this.checkPosition(0, direction.y);
+    // If X and Y are not possible check only Z
+    check = (check != false)? check : this.checkPosition(0, direction.z);
     
     // If Y is not possible only check X
     check = (check != false)? check : this.checkPosition(direction.x, 0);
     
     // Check if we have a new destination
-    if(check == false || check.x == 0 && check.y == 0) return false;
+    if(check == false || check.x == 0 && check.z == 0) return false;
     
-    // Smooth Z when difference is large
-    var dif = check.z-this.d.pos.z;
+    // Smooth Y when difference is large
+    var dif = check.y-this.d.pos.y;
     if(dif < -3 || dif > 3) {
       var s = (dif < 0)? -(dif*this.d.gravity) : dif*this.d.gravity;
       this.mode = "smooth";
@@ -108,21 +108,21 @@
 	Game.prototype.remap = (function(x,z){
 	
 	  var dir = [{x:0,z:-1},{x:1,z:-1},{x:1,z:0},{x:1,z:1},{x:0,z:1},{x:-1,z:1},{x:-1,z:0},{x:-1,z:-1}];
-	  var input = { x:x, z:z }
+	  var input = {x:x,z:z}
 	  var shift = parseInt(this.d.cam.ry/45);
 	  var index = 0;
 	  for ( var i in dir ) if (dir[i].x == input.x && dir[i].z == input.z ) var index = parseInt(i);
 	  index = ((index+shift) <= 7)? index+shift : (index+shift)-8;
-	  return {x:dir[index].x, y:dir[index].z }; 
+	  return {x:dir[index].x, z:dir[index].z }; 
 	  
   });
 	
 	
 	// Check position
-	Game.prototype.checkPosition = (function(x,y){
+	Game.prototype.checkPosition = (function(x,z){
   	
   	x = this.d.pos.x+(x*this.d.speed); 
-  	y = this.d.pos.y+(y*this.d.speed);
+  	z = this.d.pos.z+(z*this.d.speed);
   	d = []; 
   	c = 0;
   	size = this.d.size/2;
@@ -130,23 +130,23 @@
   	// Fetch all data + check for walls
   	for (var i=-1;i<2;i++){
     	for (var j=-1;j<2;j++){
-    	  d[c] = { x : x+(j*size), y : y+(i*size) };
-    	  p = this.logicMapContext.getImageData(d[c].x, d[c].y, 1, 1).data;
+    	  d[c] = { x : x+(j*size), z : z+(i*size) };
+    	  p = this.logicMapContext.getImageData(d[c].x, d[c].z, 1, 1).data;
     	  if( p[0] != p[1] || p[1] != p[2]) return false;
-    	  d[c].z = parseInt(-p[0]/(2.55)+100);
+    	  d[c].y = parseInt(-p[0]/(2.55)+100);
     	  c++;
     	}
   	}
   	
-  	// Check for to high Z index
-  	z = d[4].z
-  	maxZ = this.d.pos.z+this.d.jumpY;
-  	for (var i in d) if ((d[i].z-maxZ) >= 10) return false; 
+  	// Check for to high Y index
+  	y = d[4].y
+  	maxY = this.d.pos.y+this.d.jumpY;
+  	for (var i in d) if ((d[i].y-maxY) >= 10) return false; 
   	
-  	// Get The highest Z
-  	zHolder = [];
-  	for (var i in d) zHolder[i] = d[i].z;
-  	z = Math.max.apply(Math, zHolder);
+  	// Get The highest Y
+  	yHolder = [];
+  	for (var i in d) yHolder[i] = d[i].y;
+  	y = Math.max.apply(Math, yHolder);
   	
   	return { x:x, y:y, z:z }
   	
@@ -183,7 +183,7 @@
 	
 	// visually move map
 	Game.prototype.updatePos = (function(){
-	  this.map.style.webkitTransform = this.map.style.MozTransform  = "translate3D(-"+this.d.pos.x+"px,"+(this.d.floor+this.d.pos.z)+"px,-"+this.d.pos.y+"px)";
+	  this.map.style.webkitTransform = this.map.style.MozTransform  = "translate3D(-"+this.d.pos.x+"px,"+(this.d.floor+this.d.pos.y)+"px,-"+this.d.pos.z+"px)";
 	});
 	
 	// set transition timing for map
