@@ -3,6 +3,7 @@
 	function defaultData(){
   	return {
   	  pos: { x: 30, y: 320, z: 100 },
+  	  cam: { rx: 315, ry: 315, rz: 0},
   	  speed: 1.5,
   	  size: 20,
   	  floor: 100,
@@ -18,8 +19,9 @@
 	
 		this.d = defaultData();
 		this.mode = "walk";
-    this.charachter = document.getElementById('charachter');
+    this.cam = document.getElementById('cam');
     this.map = document.getElementById('map');
+    this.charachter = document.getElementById('charachter');
     this.buildLogicMap();
     
 	};
@@ -42,7 +44,10 @@
   });
 
   // Init game
-	Game.prototype.init = (function() { this.updatePos(); });	
+	Game.prototype.init = (function() { 
+	  this.rotateCam();
+	  this.updatePos(); 
+  });	
 	
 	// Buttons
 	Game.prototype.dPad = (function(direction){ return this.controlDispatcher("dPad", direction); });
@@ -62,7 +67,7 @@
 	// Walk through world if possible
 	Game.prototype.walk = (function(direction){
 	
-	  // Remap controls -> TO DO: make this be based on rotation
+	  // Remap controls based on camera rotation
 	  direction = this.remap(direction.x, direction.y);
 	  
 	  // Check if X and Y are possible
@@ -100,19 +105,17 @@
 	
 
   // remap input to fit rotation	
-	Game.prototype.remap = (function(x,y){
+	Game.prototype.remap = (function(x,z){
 	
-	  if(x == 0 && y == -1)   return { x:-1, y:-1 };
-	  if(x == 0 && y == 1)    return { x:1,  y:1 };
-	  if(x == 1 && y == 0)    return { x:1,  y:-1 };
-	  if(x == 1 && y == -1)   return { x:0,  y:-1 };
-	  if(x == -1 && y == 0)   return { x:-1, y:1 };
-	  if(x == -1 && y == 1)   return { x:0,  y:1 };
-	  if(y == -1 && x == -1)  return { x:-1, y:0 };
-	  if(y == 1 && x == 1)    return { x:1,  y:0 };
-    return {x:x, y:y};
+	  var dir = [{x:0,z:-1},{x:1,z:-1},{x:1,z:0},{x:1,z:1},{x:0,z:1},{x:-1,z:1},{x:-1,z:0},{x:-1,z:-1}];
+	  var input = { x:x, z:z }
+	  var shift = parseInt(this.d.cam.ry/45);
+	  var index = 0;
+	  for ( var i in dir ) if (dir[i].x == input.x && dir[i].z == input.z ) var index = parseInt(i);
+	  index = ((index+shift) <= 7)? index+shift : (index+shift)-8;
+	  return {x:dir[index].x, y:dir[index].z }; 
 	  
-	});
+  });
 	
 	
 	// Check position
@@ -191,6 +194,11 @@
 	// visually jump charachter
 	Game.prototype.translateCharachter = (function(x,y,z){
 	  this.charachter.style.webkitTransform = this.charachter.style.MozTransform  = "translate3D("+x+"px,"+y+"px,"+z+"px)";
+	});
+	
+	// Rotate camera
+	Game.prototype.rotateCam = (function(){
+	  this.cam.style.webkitTransform = this.cam.style.MozTransform  = "rotateX("+this.d.cam.rx+"deg) rotateY("+this.d.cam.ry+"deg) rotateZ("+this.d.cam.rz+"deg)";
 	});
 	
 	window.Game = Game;
